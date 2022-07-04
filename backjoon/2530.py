@@ -11,10 +11,22 @@
 # 출력
 # 첫째 줄에 종료되는 시각의 시, 분, 초을 공백을 사이에 두고 출력한다. (단, 시는 0부터 23까지의 정수이며, 분, 초는 0부터 59까지의 정수이다. 디지털 시계는 23시 59분 59초에서 1초가 지나면 0시 0분 0초가 된다.)
 
-h, m, s = map(int, input().split())
+lst = list(map(int, input().split()))
+
+h = lst[0]
+m = lst[1]
+s = lst[2]
 
 inp = int(input())
-ihour = inp//3600 % 24
-imin = inp//60 % 60
-isec = inp % 60
-print("{0} {1} {2}".format((h+ihour) % 24, (m+imin) % 60, (s+isec) % 60))
+rhour = h+inp//3600 % 24
+rmin = m+inp//60 % 60
+rsec = s+inp % 60
+
+if rsec >= 60:
+    rmin += 1
+
+if rmin >= 60:
+    rhour += 1
+
+
+print("{0} {1} {2}".format(rhour % 24, rmin % 60, rsec % 60))
