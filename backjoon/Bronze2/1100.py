@@ -11,11 +11,15 @@ lst = []
 count = 0
 
 for _ in range(8):
-    lst += input()
+    lst.append(input())
 
-for i in range(0, len(lst), 2):
-    print(lst[i])
-    if lst[i] == "F":
-        count += 1
-
+for i in range(len(lst)):
+    if i % 2 == 0:
+        for j in range(0, len(lst[i]), 2):
+            if lst[i][j] == "F":
+                count += 1
+    else:
+        for j in range(1, len(lst[i]), 2):
+            if lst[i][j] == "F":
+                count += 1
 print(count)
