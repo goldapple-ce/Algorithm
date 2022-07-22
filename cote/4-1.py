@@ -17,7 +17,6 @@
 # 첫째 줄에 여행가 A가 최종적으로 도착할 지점의 좌표 (X,Y)를 공백으로 구분하여 출력한다.
 
 N = int(input())
-space = [[False] * N for _ in range(N)]
 dir = {'L': -1, 'R': 1, 'U': -1, 'D': 1}
 plan = list(input())
 x, y = 1, 1
@@ -27,6 +26,5 @@ for now in plan:
         x += dir.get(now)
     elif now in ['U', 'D'] and y+dir.get(now) > 0:
         y += dir.get(now)
-    print(x, y)
 
-# print(y, x)
+print(y, x)
