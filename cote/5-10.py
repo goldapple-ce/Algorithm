@@ -18,7 +18,7 @@ lst = [list(map(int, input())) for _ in range(N)]
 
 
 def dfs(x, y):
-    if x <= -1 or x >= n or y <= -1 or y >= m:
+    if x <= -1 or x >= N or y <= -1 or y >= M:
         return False
     if graph[x][y] == 0:
         graph[x][y] = 1
