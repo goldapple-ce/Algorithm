@@ -9,6 +9,15 @@
 
 # 출력
 # 각 테스트 케이스에 대해 주어진 조건하에 다리를 지을 수 있는 경우의 수를 출력한다.
-num = int(input())
+def factorial(N):
+    num = 1
+    for i in range(1, N+1):
+        num *= i
+    return num
 
+
+num = int(input())
 for _ in range(num):
+    N, M = map(int, input().split())
+    res = factorial(M) // (factorial(N) * factorial(M-N))
+    print(res)
