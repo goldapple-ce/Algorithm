@@ -10,12 +10,24 @@
 
 # 출력
 # 첫째 줄에 n을 포함하는 좋은 구간의 개수를 출력한다.
+import sys
+input = sys.stdin.readline
 
 L = int(input())
-lst = list(map(int, input().split()))
+S = list(map(int, input().split()))
 N = int(input())
 
-lst.append(N)
-lst.sort()
+S.sort()
 
-for i in range(N, lst[lst.index(N)+1]):
+if N in S:
+    print(0)
+else:
+    max = min = 0
+    for num in S:
+        if num < N:
+            min = num
+        elif num > N and max == 0:
+            max = num
+    max -= 1
+    min += 1
+    print((N-min)*(max-N+1)+(max-N))
