@@ -17,18 +17,19 @@
 # 출력
 # 첫째 줄에 구하고자 하는 단어를 출력하면 된다.
 import sys
+S = list(sys.stdin.readline().rstrip())
+res = []
 
-S = sys.stdin.readline().rstrip()
+for i in range(1, len(S)-1):
+    for j in range(i+1, len(S)):
+        first = S[:i]
+        second = S[i:j]
+        third = S[j:]
 
-min1 = 0
-for i in range(1, len(S)-2):
-    if S[min1] > S[i]:
-        min1 = i
+        first.reverse()
+        second.reverse()
+        third.reverse()
 
-min2 = min1+1
-for j in range(min1, len(S)-1):
-    if S[min2] > S[j]:
-        min2 = j
+        res.append("".join(first+second+third))
 
-word1 = S[min:0]
-word2 = S
+print(min(res))
