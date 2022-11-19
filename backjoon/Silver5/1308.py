@@ -13,3 +13,14 @@
 
 # 출력
 # 오늘부터 D-Day까지 x일이 남았다면, "D-"를 출력하고 그 뒤에 공백 없이 x를 출력한다. 만약 캠프가 천년 이상 지속된다면 (오늘이 y년 m월 d일이고, D-Day가 y+1000년 m월 d일과 같거나 늦다면) 대신 "gg"를 출력한다. 오늘이 2월 29일인 경우는 주어지지 않는다.
+month = {1:31,2:28,3:31,4:30,5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
+Tday = list(map(int,input().split()))
+Dday = list(map(int,input().split()))
+res = 0
+if Tday[0]<Dday[0] or Tday[1] < Dday[1]:
+    res = month[Tday[1]]-Tday[2]
+else :
+    res = Dday[1]-Tday[1]
+
+for year in range(Dday[0]-Tday[0]):
+    for month in range()
