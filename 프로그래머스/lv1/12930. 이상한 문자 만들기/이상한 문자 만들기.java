@@ -1,28 +1,13 @@
-import java.util.Arrays;
-
 class Solution {
     public String solution(String s) {
         String answer = "";
         String[] s_arr = s.split("");
-        boolean flag = true;
-        int idx = 0;
-        for(int i = 0;i<s_arr.length;i++){
-            if(s_arr[i].equals(" ")){
-                flag = true;
-                answer += s_arr[i];
-                continue;
-            }
-            if(flag){
-                idx = 0;
-                flag = false;
-            }
-            if (idx % 2==0){
-                answer += s_arr[i].toUpperCase();
-            }else{
-                answer += s_arr[i].toLowerCase();
-            }
-            idx++;
+        int cnt = 0;
+        for(String s_i : s_arr){
+            cnt = s_i.contains(" ") ?0 :cnt +1;
+            answer += cnt%2==1 ?s_i.toUpperCase() : s_i.toLowerCase();
         }
+        
         return answer;
     }
 }
