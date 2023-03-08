@@ -5,12 +5,8 @@ class Solution {
         int answer = 0;
         int left=0,right=people.length-1;
         Arrays.sort(people);
-        while(left <= right){
-            if(people[left]+people[right] > limit){
-                right--;
-            }else{
-                left++;right--;
-            }
+        for(;left<=right;right--){
+            if (people[left]+people[right] <= limit) left++;
             answer++;
         }
         
