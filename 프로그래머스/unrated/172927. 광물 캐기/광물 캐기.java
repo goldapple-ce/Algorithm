@@ -6,7 +6,10 @@ import java.util.Comparator;
 class Solution {
     public int solution(int[] picks, String[] minerals) {
         int answer = 0;
-        int maxLength = Math.min(minerals.length%5 == 0 ?minerals.length/5 : minerals.length/5+1,Arrays.stream(picks).sum());
+        int maxLength = Math.min(minerals.length%5 == 0 
+                                 ? minerals.length/5 
+                                 : minerals.length/5+1
+                                 ,Arrays.stream(picks).sum());
         int[][] fatigues = new int[maxLength][5];
         
         HashMap<String,Integer> dict = new HashMap<>();
@@ -18,11 +21,8 @@ class Solution {
             fatigues[i/5][i%5] = dict.get(minerals[i]);
         }
         
-        Arrays.sort(fatigues,new Comparator<int[]>(){
-            @Override
-            public int compare(int[] o1, int[] o2){
-                return Arrays.stream(o2).sum() - Arrays.stream(o1).sum();
-            }
+        Arrays.sort(fatigues,(o1,o2)->{
+            return Arrays.stream(o2).sum() - Arrays.stream(o1).sum();
         });
         
         for(int i = 0, cnt = 0; i < 3; i++){
