@@ -1,20 +1,15 @@
 import java.util.Stack;
+
 class Solution{
     public int solution(String s){
-        int idx = 0;
         Stack<Character> stack = new Stack<>();
-        stack.push(s.charAt(idx++));
-        while(idx<s.length()){
-            char c = s.charAt(idx++);
-            
-            if(!stack.empty() && stack.peek() == c){
+        for(char c : s.toCharArray()){
+            if(stack.size() > 0 && stack.peek() == c){
                 stack.pop();
-            }else{
-                stack.push(c);
+                continue;
             }
+            stack.push(c);
         }
-        
-
-        return stack.empty() ?1 :0;
+        return stack.size() == 0 ? 1 : 0;
     }
 }
