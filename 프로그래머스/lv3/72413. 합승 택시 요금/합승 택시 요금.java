@@ -26,22 +26,22 @@ class Solution {
         return answer;
     }
     
-    public int[] dijstra(int start,int[] dp){
+    public int[] dijstra(int start,int[] costs){
         PriorityQueue<Node> queue = new PriorityQueue<>((o1,o2) -> o1.cost - o2.cost);
-        Arrays.fill(dp,Integer.MAX_VALUE);
-        dp[0] = 0; dp[start] = 0;
+        Arrays.fill(costs,Integer.MAX_VALUE);
+        costs[0] = 0; costs[start] = 0;
         queue.offer(new Node(start,0));
         
         while(!queue.isEmpty()){
             Node node = queue.poll();
             for(Node endNode : dict.get(node.v)){
-                if(node.cost + endNode.cost < dp[endNode.v]){
+                if(node.cost + endNode.cost < costs[endNode.v]){
                     queue.offer(new Node(endNode.v,node.cost+endNode.cost));
-                    dp[endNode.v] = node.cost + endNode.cost;
+                    costs[endNode.v] = node.cost + endNode.cost;
                 }
             }
         }
-        return dp;
+        return costs;
     }
 }
 
