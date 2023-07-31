@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
-public class Main {
 
+public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -24,24 +24,23 @@ public class Main {
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
 			
-			Deque<Doc> dq = new ArrayDeque<Doc>();
+			Deque<int[]> dq = new ArrayDeque<int[]>();
 			st = new StringTokenizer(br.readLine());
 			int[] priorityList=new int[N];
 			
 			for(int i=0;i<N;i++) {
 				int priority = Integer.parseInt(st.nextToken());
 				priorityList[i] = priority;
-				Doc doc = new Doc(priority,i);
-				dq.addLast(doc);
+				dq.addLast(new int[] {priority, i});
 			}
 
 			int answer = 1;
 			while(!dq.isEmpty()){
 				int tempMax = Arrays.stream(priorityList).max().getAsInt();
 				
-				if(tempMax==dq.peekFirst().priority) {
-					priorityList[dq.peekFirst().index]=0;
-					if(dq.peekFirst().index==M)
+				if(tempMax==dq.peekFirst()[0]) {
+					priorityList[dq.peekFirst()[1]]=0;
+					if(dq.peekFirst()[1]==M)
 						break;
 					dq.pollFirst();
 					answer++;
@@ -55,23 +54,4 @@ public class Main {
 		}
 		
 	}
-	
-	static class Doc{
-		int priority;
-		int index;
-		
-		public Doc(int priority, int index) {
-			super();
-			this.priority = priority;
-			this.index = index;
-		}
-		
-		@Override
-		public String toString() {
-			return "Print [priority=" + priority + ", index=" + index + "]";
-		}
-
-		
-	}
-
 }
