@@ -1,38 +1,50 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-import java.io.*;
-import java.util.*;
-
-class Main {
-	static int[] numType = {1,2,3,5,7,9};
+public class Main {
 	static int N;
-	static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	static ArrayList<Integer> answer;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		N = Integer.parseInt(br.readLine());
+		StringTokenizer st;
 		
-		for(int i = 1; i < numType.length; i++) 
-			checkPrime(numType[i],1);
-		System.out.println(sb);
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		
+		answer = new ArrayList<Integer>();
+		int number=0;
+		int cnt=0;
+		dfs(number,cnt);
+		for(int a:answer)
+			System.out.println(a);
+		
 	}
-
-	public static void checkPrime(int num, int depth) {
-		if(!isPrime(num)) return;
-		if(depth == N) {
-			sb.append(num).append("\n");
+	
+	public static void dfs(int n, int cnt) {
+		if(cnt==N) {
+			answer.add(n);
 			return;
 		}
 		
-		for(int i = 0; i < numType.length; i++) {
-			checkPrime(num*10+numType[i],depth+1);
+		for(int i=0;i<10;i++) {
+			int number = n*10+i;
+			
+			if(isPrime(number)) {
+				dfs(number,cnt+1);
+			}
 		}
 	}
-	
-	public static boolean isPrime(int num) {
-		for(int i = 2; i <= Math.sqrt(num); i++) {
-			if(num%i == 0) return false;
+	public static boolean isPrime(int n) {
+		if(n<2) return false;
+		
+		for(int i=2;i<n;i++) {
+			if(n%i==0) return false;
 		}
 		return true;
 	}
+
 }
