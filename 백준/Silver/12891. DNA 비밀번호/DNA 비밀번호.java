@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-public class Main {
-
-	public static boolean is_valid_password(int[] cnt, int[] needs) {
+public class Main{
+	static char[] array= {'A', 'C', 'G', 'T'};
+	
+	public static boolean is_valid_password(HashMap<Character,Integer> cnt, int[] needs) {
+		
 		for(int i=0;i<4;i++) {
-			if(cnt[i]<needs[i]) return false;
+			if(cnt.get(array[i])<needs[i]) return false;
 		}
 		return true;
+		
 	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,21 +31,18 @@ public class Main {
 			needs[i]=Integer.parseInt(st.nextToken());
 		}
 		
-		HashMap<String, Integer> checkList = new HashMap<String,Integer>();
-		checkList.put("A", 0);
-		checkList.put("C", 1);
-		checkList.put("G", 2);
-		checkList.put("T", 3);
-		
-		int s = 0, e=P-1;
-		int[] cnt = new int[4];
+		HashMap<Character, Integer> cnt = new HashMap<Character,Integer>();
+		cnt.put('A', 0);
+		cnt.put('C', 0);
+		cnt.put('G', 0);
+		cnt.put('T', 0);
 		
 		for(int i=0;i<P;i++) {
-			int idx = checkList.get(String.valueOf(DNA.charAt(i)));
-			cnt[idx]++;
+			cnt.put(DNA.charAt(i), cnt.get(DNA.charAt(i))+1);
 		}
 		
 		int answer = 0;
+		int s = 0, e=P-1;
 		
 		while(true) {
 			if(is_valid_password(cnt,needs)) answer++;
@@ -50,11 +50,9 @@ public class Main {
 			e++;
 			if(e>=S) break;
 			
-			int idx = checkList.get(String.valueOf(DNA.charAt(e)));
-			cnt[idx]++;
+			cnt.put(DNA.charAt(e), cnt.get(DNA.charAt(e))+1);
 			
-			idx = checkList.get(String.valueOf(DNA.charAt(s)));
-			cnt[idx]--;
+			cnt.put(DNA.charAt(s), cnt.get(DNA.charAt(s))-1);
 			s++;
 		}
 		
