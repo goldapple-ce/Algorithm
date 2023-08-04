@@ -1,10 +1,6 @@
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 class Point {
 	int x;
@@ -67,8 +63,6 @@ public class Main {
 			for (int i = 0; i < person.size(); i++) {
 				int temp = Integer.MAX_VALUE;
 
-				// 어떤 집과 치킨집 중 open한 치킨집의 모든 거리를 비교한다.
-				// 그 중, 최소 거리를 구한다.
 				for (int j = 0; j < chicken.size(); j++) {
 					if (open[j]) {
 						int distance = Math.abs(person.get(i).x - chicken.get(j).x)
