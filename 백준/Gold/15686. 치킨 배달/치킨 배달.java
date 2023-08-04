@@ -1,23 +1,22 @@
-
 import java.io.*;
 import java.util.*;
 
-class Point {
-	int x;
-	int y;
+class Position {
+	int row;
+	int col;
 
-	Point(int x, int y) {
-		this.x = x;
-		this.y = y;
+	Position (int row, int col) {
+		this.row = row;
+		this.col = col;
 	}
 }
 
 public class Main {
 	static int N, M;
 	static int[][] map;
-	static ArrayList<Point> person;
-	static ArrayList<Point> chicken;
-	static int ans;
+	static ArrayList<Position> house = new ArrayList<>();
+	static ArrayList<Position> chicken = new ArrayList<>();
+	static int answer = Integer.MAX_VALUE;
 	static boolean[] open;
 
 	public static void main(String[] args) throws Exception {
@@ -29,8 +28,6 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 
 		map = new int[N][N];
-		person = new ArrayList<>();
-		chicken = new ArrayList<>();
 
 		// 미리 집과 치킨집에 해당하는 좌표를 ArrayList에 넣어 둠.
 		for (int i = 0; i < N; i++) {
@@ -39,18 +36,18 @@ public class Main {
 				map[i][j] = Integer.parseInt(st.nextToken());
 
 				if (map[i][j] == 1) {
-					person.add(new Point(i, j));
+					house.add(new Position(i, j));
 				} else if (map[i][j] == 2) {
-					chicken.add(new Point(i, j));
+					chicken.add(new Position(i, j));
 				}
 			}
 		}
 
-		ans = Integer.MAX_VALUE;
+		
 		open = new boolean[chicken.size()];
 
 		DFS(0, 0);
-		bw.write(ans + "\n");
+		bw.write(answer + "\n");
 		bw.flush();
 		bw.close();
 		br.close();
@@ -60,20 +57,19 @@ public class Main {
 		if (cnt == M) {
 			int res = 0;
 
-			for (int i = 0; i < person.size(); i++) {
+			for (int i = 0; i < house.size(); i++) {
 				int temp = Integer.MAX_VALUE;
 
 				for (int j = 0; j < chicken.size(); j++) {
 					if (open[j]) {
-						int distance = Math.abs(person.get(i).x - chicken.get(j).x)
-								+ Math.abs(person.get(i).y - chicken.get(j).y);
-
+						int distance = Math.abs(house.get(i).row - chicken.get(j).row)
+								+ Math.abs(house.get(i).col - chicken.get(j).col);
 						temp = Math.min(temp, distance);
 					}
 				}
 				res += temp;
 			}
-			ans = Math.min(ans, res);
+			answer = Math.min(answer, res);
 			return;
 		}
 
