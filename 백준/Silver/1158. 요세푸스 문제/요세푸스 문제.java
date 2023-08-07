@@ -1,35 +1,24 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
+class Main {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder().append('<');
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken()), K = Integer.parseInt(st.nextToken());
+		List<Integer> list = new ArrayList<>();
+		int now = 0;
+		for (int n = 1; n <= N; n++) list.add(n);
 		
-		st = new StringTokenizer(br.readLine());
-		
-		int N = Integer.parseInt(st.nextToken());
-		int K = Integer.parseInt(st.nextToken());
-		
-		Deque<Integer> dq = new ArrayDeque<>();
-		for(int i=0;i<N;i++)
-			dq.add(i+1);
-		
-		while(!dq.isEmpty()) {
-			for (int i = 0; i < K-1; i++) {
-				dq.add(dq.poll());
-			}
-			sb.append(dq.poll()+", ");
+		for (int n = 0; n < N; n++) {
+			now = (now+K-1)%list.size();
+			sb.append(',').append(' ').append(list.remove(now));
 		}
+		sb.delete(1,3);
+		sb.append('>');
 		
-		sb.delete(sb.length()-2, sb.length());
-		System.out.print("<"+sb+">");
+		System.out.println(sb);
 	}
-
 }
