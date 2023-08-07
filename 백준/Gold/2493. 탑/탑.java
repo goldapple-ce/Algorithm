@@ -1,41 +1,41 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
-import java.io.*;
-import java.util.*;
-
-class Main {
-	static int N;
-
+public class Main {
+	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
-		N = Integer.parseInt(br.readLine());
-		int[] tops = new int[N], answer = new int[N];
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for(int n = 0; n < N; n++) tops[n] = Integer.parseInt(st.nextToken()); 
-
-		Stack<Top> stack = new Stack<>();
 		
-		for(int i = N-1; i >= 0; i--) {				
-			while(!stack.isEmpty() && stack.peek().height <= tops[i]) {
-				Top top = stack.pop();
-				answer[top.idx] = i+1;
-			}
-			stack.add(new Top(i,tops[i]));	
-		}
-		for(int i = 0; i < N; i++) sb.append(answer[i]).append(" ");
-		System.out.println(sb);
-	}
-}
+        int N = Integer.parseInt(br.readLine());
+        
+        int[] arr = new int[N+1];
+        st = new StringTokenizer(br.readLine());
+        for(int i=1;i<N+1;i++) 
+        	arr[i]= Integer.parseInt(st.nextToken());
+        
+        int[] answer = new int[N+1];
+        
+        Stack<int[]> s = new Stack<int[]>();
+        
+        for(int idx=N; idx>=0;idx--) {
+        	int now = arr[idx];
+    		while(!s.isEmpty() && s.peek()[1]<=now) {
+    			answer[s.pop()[0]] = idx;
+    		}
+    			s.add(new int[] {idx,arr[idx]});
+        	}
 
-class Top{
-	int idx, height;
-	
-	public Top(int idx, int height) {
-		this.idx = idx;
-		this.height = height;
+        for(int i=1;i<N+1;i++)
+        	sb.append(answer[i]+" ");
+        
+        System.out.println(sb);
+        
 	}
-	
-	public String toString() {
-		return "{ idx : "+idx+", heigth : "+height+"}";
-	}
+
 }
