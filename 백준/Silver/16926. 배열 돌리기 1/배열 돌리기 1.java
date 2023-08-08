@@ -69,11 +69,11 @@ public class Main {
 		
 		for (int i = 0; i < N; i++) {
 			for(int j=0;j<M;j++)
-				System.out.print(adj[i][j]+" ");
-			System.out.println();
-			
+				sb.append(adj[i][j]+" ");
+			sb.append("\n");
 		}
 
+		System.out.println(sb);
 	}
 
 }
