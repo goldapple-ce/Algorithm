@@ -1,41 +1,38 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-class Main {
-	static final int MAX_SIZE = 100, SIZE = 10;
+public class Main {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int[][] map = new int[MAX_SIZE + 1][MAX_SIZE + 1];
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb= new StringBuilder();
+        
+		int[][] adj = new int[100][100];
 		int N = Integer.parseInt(br.readLine());
+		
 		int answer = 0;
-		int maxRow = 0, maxCol = 0;
-		for (int n = 0; n < N; n++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int col = Integer.parseInt(st.nextToken()), row = Integer.parseInt(st.nextToken());
-			map[row][col] += 1;
-			map[row + SIZE ][col + SIZE ] += 1;
-			map[row + SIZE ][col] -= 1;
-			map[row][col + SIZE ] -= 1;
-			maxRow = Math.max(maxRow, row+SIZE);
-			maxCol = Math.max(maxCol, col+SIZE);
-		}
-
-		for (int row = 0; row < maxRow; row++) {
-			for (int col = 1; col < maxCol; col++)
-				map[row][col] += map[row][col - 1];
-		}
-
-		for (int col = 0; col < maxCol; col++) {
-			for (int row = 1; row < maxRow; row++)
-				map[row][col] += map[row - 1][col];
+		for(int n=0;n<N;n++) {
+			st = new StringTokenizer(br.readLine());
+			int r = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			
+			for(int i=r;i<r+10;i++) {
+				for(int j=c;j<c+10;j++) {
+					if(adj[i][j]==0) {
+						answer++;
+						adj[i][j]=1;
+					}
+					
+				}
+			}
 		}
 		
-		for (int row = 0; row < maxRow; row++) {
-			for (int col = 0; col < maxCol; col++)
-				if(map[row][col] > 0) answer++;
-		}
-		System.out.println(answer);
+		sb.append(answer);
+		System.out.println(sb);
 
 	}
+
 }
