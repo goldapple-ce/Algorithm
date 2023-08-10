@@ -28,27 +28,13 @@ class Main {
 
 		for (int m = 0; m < M; m++) {
 			st = new StringTokenizer(br.readLine());
-			int dir = Integer.parseInt(st.nextToken()) - 1, S = Integer.parseInt(st.nextToken());
-			for (int s = 0; s < S; s++) {
-				for (Position cloud : clouds) {
-					cloud.row = (cloud.row + dirType[dir][0]) % N;
-					if (cloud.row < 0)
-						cloud.row = N - 1;
-					cloud.col = (cloud.col + dirType[dir][1]) % N;
-					if (cloud.col < 0)
-						cloud.col = N - 1;
-				}
-			}
+			int dir = Integer.parseInt(st.nextToken()) - 1, s = Integer.parseInt(st.nextToken());
+			for (Position cloud : clouds) {
+				cloud.row = (cloud.row + N + (dirType[dir][0] * (s % N))) % N;
+				cloud.col = (cloud.col + N + (dirType[dir][1] * (s % N))) % N;
 
-//			System.out.println("최종 구름위치 : "+clouds);
-			for (Position cloud : clouds)
 				map[cloud.row][cloud.col] += 1;
-
-//			System.out.println("구름 비내리기");
-//			for(int[] row : map) {
-//				System.out.println(Arrays.toString(row));
-//			}System.out.println();
-
+			}
 			for (Position cloud : clouds) {
 				int cnt = 0;
 				for (int d : diagonal) {
@@ -58,11 +44,6 @@ class Main {
 				}
 				map[cloud.row][cloud.col] += cnt;
 			}
-
-//			System.out.println("주위 물 가져오기");
-//			for(int[] row : map) {
-//				System.out.println(Arrays.toString(row));
-//			}System.out.println();
 
 			List<Position> newClouds = new ArrayList<>();
 			for (int row = 0; row < N; row++) {
@@ -75,13 +56,6 @@ class Main {
 			}
 
 			clouds = newClouds;
-
-//			System.out.println("최종상태");
-//			for(int[] row : map) {
-//				System.out.println(Arrays.toString(row));
-//			}
-//			
-//			System.out.println(clouds);
 		}
 		int answer = 0;
 		for (int row[] : map)
@@ -109,12 +83,6 @@ class Position {
 	public Position(int row, int col) {
 		this.row = row;
 		this.col = col;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		Position pos = (Position) o;
-		return this.row == pos.row && this.col == pos.col;
 	}
 
 	@Override
