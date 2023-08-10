@@ -4,7 +4,6 @@ import java.util.*;
 
 class Main {
 	static int[][] dirType = { { 0, -1 }, { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 } };
-	static int[] diagonal = { 1, 3, 5, 7 };
 	static int N;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -15,6 +14,7 @@ class Main {
 		N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		int[][] map = new int[N][N];
+		
 		for (int row = 0; row < N; row++) {
 			st = new StringTokenizer(br.readLine());
 			for (int col = 0; col < N; col++)
@@ -29,15 +29,17 @@ class Main {
 		for (int m = 0; m < M; m++) {
 			st = new StringTokenizer(br.readLine());
 			int dir = Integer.parseInt(st.nextToken()) - 1, s = Integer.parseInt(st.nextToken());
+			boolean[][] visited=new boolean[N][N];
 			for (Position cloud : clouds) {
 				cloud.row = (cloud.row + N + (dirType[dir][0] * (s % N))) % N;
 				cloud.col = (cloud.col + N + (dirType[dir][1] * (s % N))) % N;
 
 				map[cloud.row][cloud.col] += 1;
+				visited[cloud.row][cloud.col] = true;
 			}
 			for (Position cloud : clouds) {
 				int cnt = 0;
-				for (int d : diagonal) {
+				for (int d = 1; d < 8; d+=2) {
 					int nRow = cloud.row + dirType[d][0], nCol = cloud.col + dirType[d][1];
 					if (inRange(nRow, nCol) && map[nRow][nCol] > 0)
 						cnt++;
@@ -48,7 +50,7 @@ class Main {
 			List<Position> newClouds = new ArrayList<>();
 			for (int row = 0; row < N; row++) {
 				for (int col = 0; col < N; col++) {
-					if (!contains(clouds, row, col) && map[row][col] > 1) {
+					if (!visited[row][col] && map[row][col] > 1) {
 						newClouds.add(new Position(row, col));
 						map[row][col] -= 2;
 					}
