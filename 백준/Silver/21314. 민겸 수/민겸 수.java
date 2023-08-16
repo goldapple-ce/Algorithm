@@ -6,29 +6,24 @@ public class Main {
 
     public static String switchToNumber(String s) {
     	
-        String result = "";
         int len = s.length();
         
         if(len==0) return "";
         if(len==1) return s.equals("M")? "1":"5";
         
-        if(s.lastIndexOf("K")>0){ // K가 있으면  5~ format
-        	result+="5";
-        }else { // K가 없으면 1~ format
-        	result+="1";
+        String result = "";
+        if(s.lastIndexOf("K")>0) result+="5";
+        else result+="1";
 
-        }
-        
     	for(int i=0;i<len-1;i++)
     		result+="0";
         
-
         return result;
-        
         
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         
         String str = br.readLine();
         
@@ -43,15 +38,16 @@ public class Main {
                 continue;
             }
 
-            bigAnswer += switchToNumber(buffer+"K");
+            sb.append(switchToNumber(buffer+"K"));
             buffer="";
         }
         if(buffer.length()>0) { //buffer에 M만 있을 때 
             for(int i=0;i<buffer.length();i++) {
-                bigAnswer+="1";
+            	sb.append("1");
             }
         }
         
+        sb.append("\n");
         
         // 작은수: K앞에서 짜르기, K 계산
         buffer = "";
@@ -61,17 +57,17 @@ public class Main {
                 continue;
             }
             
-            smallAnswer+= switchToNumber(buffer);
-            smallAnswer += "5";
+            sb.append(switchToNumber(buffer));
+            sb.append("5");
             
             buffer="";
         }
         if(buffer.length()>0) {
-            smallAnswer+=switchToNumber(buffer);
+        	sb.append(switchToNumber(buffer));
         }
         
-        System.out.println(bigAnswer);
-        System.out.println(smallAnswer);
+        System.out.println(sb);
+
     }
 
 }
