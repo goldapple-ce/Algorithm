@@ -1,48 +1,58 @@
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    static String[] video;
-    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        video = new String[n];
-        for (int i = 0; i < n; i++) {
-            video[i] = sc.next();
-        }
-        recur(0, 0, n);
-        System.out.println(sb);
-    }
+	static int N, adj[][];
 
-    static void recur(int x, int y, int len) {
-        if (len == 1) {
-            sb.append(video[y].charAt(x));
-            return;
-        }
-        if (isSameRange(x, y, len)) {
-            sb.append(video[y].charAt(x));
-            return;
-        }
-        sb.append('(');
-        int half = len / 2;
-        recur(x, y, half);
-        recur(x + half, y, half);
-        recur(x, y + half, half);
-        recur(x + half, y + half, half);
-        sb.append(')');
-    }
+	static StringBuilder sb  = new StringBuilder();
+	public static void solve(int r, int c, int size) {
+		
+		// 현재 범위 체크
+		int[] cnt= new int[2];
+		for (int i = r; i < r + size; i++) {
+			for (int j = c; j < c + size; j++) {
+				cnt[adj[i][j]]++;
+				if(cnt[0]>0 && cnt[1]>0) break;
+			}
+		}
+		if(cnt[0]==size*size) {
+			sb.append("0");
+		}else if(cnt[1]==size*size) {
+			sb.append("1");
+		}else {
+			sb.append("(");
+			int half = size/2;
+			// 1사분면
+			solve(r,c,half);
+			// 2사분면
+			solve(r,c+half,half);
+			// 3사분면
+			solve(r+half, c, half);
+			// 4사분면
+			solve(r+half, c+half, half);
+			sb.append(")");
+		}
 
-    static boolean isSameRange(int x, int y, int len) {
-        char bit = video[y].charAt(x);
-        for (int ny = y; ny < y + len; ny++) {
-            for (int nx = x; nx < x + len; nx++) {
-                if (video[ny].charAt(nx) != bit)
-                    return false;
-            }
-        }
-        return true;
-    }
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+
+		N = Integer.parseInt(br.readLine());
+		adj = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			String[] str = br.readLine().split("");
+			for (int j = 0; j < N; j++) {
+				adj[i][j] = Integer.parseInt(str[j]);
+			}
+		}
+
+		solve(0, 0, N);
+		System.out.println(sb);
+	}
 }
-
