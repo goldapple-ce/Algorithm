@@ -1,70 +1,58 @@
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-//DFS
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int R; // 세로
+    static int C;// 가로
+    static char [][] origin;
+    static Set <Character> data;
+    static int ans;
+    static int [] dx = {-1,0,1,0};
+    static int  [] dy = {0,-1,0,1};
+    public static void main(String[] args) throws Exception{
+        input();
+        ans =0;
+        data = new HashSet<>(26);
+        data.add(origin[0][0]);
+        dfs(0,0,1);
+        System.out.println(ans);
+    }
 
-	static int R, C;
-	static int adj[][];
-	static Map<Integer, Boolean> visited;
-	static int answer;
-	static int d[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } }; // 상 하 좌 우
+    static void input() throws Exception{
 
-	public static void main(String[] args) throws Exception {
-		input();
-		visited.put(adj[0][0], true);
-		dfs(0, 0, 1);
-		print();
-	}
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        R = Integer.parseInt(st.nextToken());
+        C= Integer.parseInt(st.nextToken());
 
-	private static void input() throws Exception {
-		st = new StringTokenizer(br.readLine());
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
+        origin = new char[R][C];
 
-		adj = new int[R][C];
-		visited = new HashMap<>();
-		
-		for (int i = 0; i <= 'Z' - 'A'; i++) 
-			visited.put(i, false);
-		
+        for(int y=0; y<R; y++){
+            String ip = br.readLine();
+            for(int x=0; x<C;x++){
+                origin[y][x] = ip.charAt(x);
+            }
 
-		for (int i = 0; i < R; i++) {
-			String[] str = br.readLine().split("");
-			for (int j = 0; j < C; j++)
-				adj[i][j] =(int)(str[j].charAt(0)-'A');
-		}
+        }
+    }
 
-	}
-
-	private static void dfs(int r, int c, int cnt) {
-		answer = Math.max(answer, cnt);
-
-		for (int i = 0; i < 4; i++) {
-			int nr = r + d[i][0];
-			int nc = c + d[i][1];
-
-			if (nr < 0 || nr >= R || nc < 0 || nc >= C) continue;
-			if (visited.get(adj[nr][nc])) continue;
-
-			visited.put(adj[nr][nc], true);
-			dfs(nr, nc, cnt + 1);
-			visited.put(adj[nr][nc], false);
-
-		}
-
-	}
-
-	private static void print() {
-		sb.append(answer);
-		System.out.println(sb);
-	}
-
+    static boolean in_range(int x,int y){
+        return 0<= x && x<C && 0<=y && y<R;
+    }
+    static void dfs(int x , int y, int depth){
+        ans = Math.max(ans,depth);
+        for(int dir=0;dir<4;dir++){
+            int cx = x+dx[dir];
+            int cy = y +dy[dir];
+            if(in_range(cx,cy) && !data.contains(origin[cy][cx])){
+                data.add(origin[cy][cx]);
+                dfs(cx,cy,depth+1);
+                data.remove(origin[cy][cx]);
+            }
+        }
+    }
 }
