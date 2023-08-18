@@ -1,63 +1,68 @@
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
-	
-	static int R,C;
-	static int adj[][];
-	
+	static int maxRow, maxCol;
+	static int[][] dirType = { { 0, -1 }, { -1, 0 }, { 0, 1 }, { 1, 0 } };
+
 	public static void main(String[] args) throws Exception {
-		input();
-		bfs(0,0);
-		System.out.println(adj[R-1][C-1]+1);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		maxRow = Integer.parseInt(st.nextToken());
+		maxCol = Integer.parseInt(st.nextToken());
+		boolean[][] map = new boolean[maxRow][maxCol];
+		for (int row = 0; row < maxRow; row++) {
+			String strRow = br.readLine();
+			for (int col = 0; col < maxCol; col++)
+				map[row][col] = strRow.charAt(col) == '1';
+		}
+		System.out.println(findRoad(new Position(0, 0, 0), map)+1);
 	}
 
+	public static int findRoad(Position start, boolean[][] map) {
+		Deque<Position> queue = new ArrayDeque<>();
+		queue.offer(start);
+		map[start.row][start.col] = false;
 
-	private static void input() throws Exception {
-		st = new StringTokenizer(br.readLine());
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
-		
-		adj =new int[R][C];
-		for(int i=0;i<R;i++) {
-			String[] str = br.readLine().split("");
-			for(int j=0;j<C;j++) {
-				adj[i][j] = Integer.parseInt(str[j]);
+		while (!queue.isEmpty()) {
+			Position now = queue.poll();
+			if (now.row == maxRow - 1 && now.col == maxCol - 1) 
+				return now.len;
+			
+			
+			for (int dir = 0; dir < dirType.length; dir++) {
+				int nRow = now.row + dirType[dir][0];
+				int nCol = now.col + dirType[dir][1];
+
+				if (inRange(nRow, nCol) && map[nRow][nCol]) {
+					map[nRow][nCol] = false;
+					queue.offer(new Position(nRow, nCol, now.len + 1));
+				}
 			}
 		}
-		
+		return 0;
 	}
-	
-	private static void bfs(int r, int c) {
-		Deque<int[]> dq  = new ArrayDeque<>();		
-		int[][] delta = {{1,0},{0,1},{-1,0},{0,-1}}; // 하, 우, 상, 좌
-		dq.add(new int[] {r,c});
-		adj[r][c]=0;
-		
-		while(!dq.isEmpty()) {
-			int[] now = dq.poll();
-			
-			for(int[] d: delta) {
-				int nr = now[0]+d[0];				
-				int nc = now[1]+d[1];				
-				
-				if(nr<0 || nc<0 || nr>=R || nc >=C) continue;
-				if(adj[nr][nc]!=1) continue;
-				
-				adj[nr][nc]  = adj[now[0]][now[1]]+1;
-				dq.add(new int[] {nr,nc});
-			}
-			
-		}
-		
+
+	public static boolean inRange(int row, int col) {
+		return 0 <= row && row < maxRow && 0 <= col && col < maxCol;
+	}
+}
+
+class Position {
+	int row, col;
+	int len;
+
+	public Position(int row, int col, int len) {
+		this.row = row;
+		this.col = col;
+		this.len = len;
+	}
+
+	@Override
+	public String toString() {
+		return "Position [row=" + row + ", col=" + col + ", len=" + len + "]";
 	}
 
 }
