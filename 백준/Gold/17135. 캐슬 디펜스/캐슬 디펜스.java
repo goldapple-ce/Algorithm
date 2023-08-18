@@ -21,7 +21,6 @@ public class Main {
 				originMap[row][col] = Integer.parseInt(st.nextToken());
 			}
 		}
-//		printMap(originMap);
 		combination(maxCol, originMap);
 		System.out.println(answer);
 	}
@@ -30,7 +29,6 @@ public class Main {
 		for (int i = 0; i < N - 2; i++) {
 			for (int j = i + 1; j < N - 1; j++) {
 				for (int k = j + 1; k < N; k++) {
-//					System.out.println("i : " + i + ", j : " + j + ", k :" + k);
 					startGame(new Position[] { new Position(maxRow - 1, i, 0), new Position(maxRow - 1, j, 0),
 							new Position(maxRow - 1, k, 0) }, originMap);
 				}
@@ -47,31 +45,18 @@ public class Main {
 		}
 		for (int level = 0; level < maxRow; level++) {
 			set.clear();
-//			System.out.println("level :" + level);
 			for (int i = 0; i < archers.length; i++) {
 				Position enemy = findEnemy(archers[i], map);
 				if (enemy.depth != -1)
 					set.add(enemy);
 			}
 			kill += set.size();
-//			System.out.println(set);
 			for (Position enemy : set)
 				map[enemy.row][enemy.col] = 0;
-//			printMap(map);
 			nextStage(map);
-//			printMap(map);
-//			System.out.println(kill);
 		}
 
 		answer = Math.max(answer, kill);
-//		System.out.println(answer);
-	}
-
-	public static void printMap(int[][] map) {
-		for (int[] row : map) {
-			System.out.println(Arrays.toString(row));
-		}
-		System.out.println();
 	}
 
 	public static Position findEnemy(Position archer, int[][] map) {
