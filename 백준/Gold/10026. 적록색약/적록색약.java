@@ -1,97 +1,79 @@
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
-	
+	static int[][] dirType = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 	static int N;
-	static int[][] adj1;
-	static int[][] adj2;
-	static boolean[][] visited;
-	static int[][] delta = {{-1,0},{1,0},{0,-1},{0,1}}; //상하좌우
-	static int[] answer;
-	
-	public static boolean is_valid_coord(int r,int c) {
-		return 0<=r && r<N && 0<=c && c<N;
-	}
-	public static void bfs(int r, int c, int target, int[][]a) {
-		visited[r][c] = true;
-		
-		Deque<int[]> dq = new ArrayDeque<>();
-		dq.add(new int[] {r,c,target});
-		
-		while(!dq.isEmpty()) {
-			int[] now = dq.poll();
-			
-			for(int[] d: delta) {
-				int nr = now[0]+d[0];
-				int nc = now[1]+d[1];
-				
-				if(is_valid_coord(nr,nc) && !visited[nr][nc]&&a[nr][nc]==target) {
-					visited[nr][nc]=true;
-					dq.add(new int[] {nr,nc,target});
-				}
-				
-			}
-		}
-	
-	}
-	public static void main(String[] args) throws IOException {
-		
+	static char[][] map;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		int answer1 = 0, answer2 = 0;
 		N = Integer.parseInt(br.readLine());
-		
-		adj1 = new int[N][N];
-		adj2 = new int[N][N];
-		
-		for(int i=0;i<N;i++) {
-			String[] input = br.readLine().split("");
-			
-			for(int j=0;j<N;j++) {
-				
-				if(input[j].equals("R")) {
-					adj1[i][j] = 0;
-					adj2[i][j] = 0;
-				}else if(input[j].equals("G")) {
-					adj1[i][j] = 1;
-					adj2[i][j] = 0;
-				}else { //B
-					adj1[i][j] = 2;
-					adj2[i][j] = 3;			
+		map = new char[N][N];
+		for (int row = 0; row < N; row++) {
+			String strRow = br.readLine();
+			for (int col = 0; col < N; col++) {
+				map[row][col] = strRow.charAt(col);
+			}
+		}
+
+		boolean[][] visited = new boolean[N][N];
+		boolean[][] RGVisited = new boolean[N][N];
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < N; col++) {
+				if (!visited[row][col]) {
+					dfs(row, col, map[row][col], visited);
+					answer1++;
 				}
 			}
 		}
-		
-		answer = new int[2];
-		
-		visited = new boolean[N][N];
-		for(int i=0;i<N;i++) {
-			for(int j=0;j<N;j++) {
-				if(!visited[i][j]) {
-					bfs(i,j,adj1[i][j], adj1);
-					answer[0]++;
+
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < N; col++) {
+				if (!RGVisited[row][col]) {
+					if (map[row][col] == 'G')
+						map[row][col] = 'R';
+					dfsRGWeakness(row, col, map[row][col], RGVisited);
+					answer2++;
 				}
 			}
 		}
-		
-		visited = new boolean[N][N];
-		for(int i=0;i<N;i++) {
-			for(int j=0;j<N;j++) {
-				if(!visited[i][j]) {
-					bfs(i,j,adj2[i][j],adj2);
-					answer[1]++;					
-				}
-			}
-		}
-		System.out.println(answer[0]+" "+answer[1]);
+
+		System.out.println(answer1 + " " + answer2);
 	}
 
+	public static void dfsRGWeakness(int row, int col, char color, boolean[][] visited) {
+		visited[row][col] = true;
+
+		for (int dir = 0; dir < dirType.length; dir++) {
+			int nRow = row + dirType[dir][0];
+			int nCol = col + dirType[dir][1];
+
+			if (inRange(nRow, nCol) && !visited[nRow][nCol]) {
+				if (map[nRow][nCol] == 'G')
+					map[nRow][nCol] = 'R';
+				if (map[nRow][nCol] == color)
+					dfsRGWeakness(nRow, nCol, color, visited);
+			}
+		}
+	}
+
+	public static void dfs(int row, int col, char color, boolean[][] visited) {
+		visited[row][col] = true;
+
+		for (int dir = 0; dir < dirType.length; dir++) {
+			int nRow = row + dirType[dir][0];
+			int nCol = col + dirType[dir][1];
+
+			if (inRange(nRow, nCol) && !visited[nRow][nCol] && map[nRow][nCol] == color)
+				dfs(nRow, nCol, color, visited);
+		}
+	}
+
+	public static boolean inRange(int row, int col) {
+		return 0 <= row && row < N && 0 <= col && col < N;
+	}
 }
