@@ -1,48 +1,66 @@
 
-import java.util.*;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
-
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		StringBuilder sb = new StringBuilder();
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		List<Integer>[] students = new ArrayList[N + 1];
-		int[] edgeCnt = new int[N + 1];
-		for (int n = 0; n <= N; n++)
-			students[n] = new ArrayList<>();
-
-		for (int m = 0; m < M; m++) {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
+	
+	static int N,M;
+	static List<List<Integer>> graph;
+	public static void main(String[] args) throws IOException {
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		int[] degree = new int[N+1];
+		
+		
+		graph = new ArrayList<>();
+		for(int i=0;i<N+1;i++)
+			graph.add(new ArrayList<>());
+		
+		for(int i=0;i<M;i++) {
 			st = new StringTokenizer(br.readLine());
-			int parent = Integer.parseInt(st.nextToken());
-			int child = Integer.parseInt(st.nextToken());
-			students[parent].add(child);
-			edgeCnt[child]++;
-		}
-
-		Deque<Integer> queue = new ArrayDeque<>();
-		for (int n = 1; n <= N; n++) {
-			if (edgeCnt[n] == 0)
-				queue.offer(n);
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			degree[b]++;
+			graph.get(a).add(b);
 		}
 		
-		while(!queue.isEmpty()) {
-			int student = queue.poll();
-			
-			sb.append(student).append(' ');
-			List<Integer> childs = students[student];
-			
-			for(int i = 0;i< childs.size(); i++) {
-				int child = childs.get(i);
-				edgeCnt[child]--;
-				
-				if(edgeCnt[child] == 0) queue.offer(child);
+		Deque<Integer> dq = new ArrayDeque<>();
+		boolean visited[] = new boolean[N+1];
+		List<Integer> answer = new ArrayList<Integer>();
+		
+		for(int i=1;i<N+1;i++) {
+			if(degree[i]==0) {
+				dq.add(i);
+				visited[i]=true;
+				answer.add(i);
 			}
-//			System.out.println(queue);
+		}
+		
+		while(!dq.isEmpty()) {
+			int now = dq.poll();
+			sb.append(now+" ");
+			
+			for(int node: graph.get(now)) {
+				if(--degree[node]==0) {
+					dq.add(node);
+				}
+			}
 		}
 		System.out.println(sb);
+		
 	}
+
 }
