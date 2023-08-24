@@ -1,68 +1,39 @@
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
 
-public class Main{
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	static StringTokenizer st;
-	
-	static int n, d, k, c; 
-	static int left, right, maxCase;
-	static int[] sushi;
-	static Map<Integer, Integer> selectedSushi = new HashMap<>();
-	static Set<Integer> tempCase;
-	
-	public static void main(String[] args) throws IOException {
-		input();	// 입력 받기
-		run();
-		bw.write(maxCase + "");
-		bw.flush();
-		bw.close();
-	}
-	
-	static void input() throws IOException {
-		st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());	
-		d = Integer.parseInt(st.nextToken());	
-		k = Integer.parseInt(st.nextToken());	
-		c = Integer.parseInt(st.nextToken());	
-		sushi = new int[n];
-		tempCase = new HashSet<>();
-		tempCase.add(c);
-		right = k-1;
-		for(int i = 0; i <= d; ++i) selectedSushi.put(i, 0);
-		for(int i = 0; i < n; ++i) {
-			sushi[i] = Integer.parseInt(br.readLine());
-			if(i < k) {
-				selectedSushi.replace(sushi[i], selectedSushi.get(sushi[i]) + 1);		
-				tempCase.add(sushi[i]);
-			}
+import java.util.*;
+import java.io.*;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int D = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		int[] belt = new int[N];
+		int[] counter = new int[D + 1];
+
+		for (int n = 0; n < N; n++)
+			belt[n] = Integer.parseInt(br.readLine());
+
+		
+		int typeCnt = 0,answer = 0;
+		for (int i = 0; i < K; i++) {
+			if (counter[belt[i]]++ == 0)
+				typeCnt++;
 		}
-		maxCase = tempCase.size();
-	}
-	
-	static void run() {
-		if(n == k) return;
-		for(int i = 1; i < n; ++i) {
-			removeSushi(sushi[left]);
-			left = (left+1) % n;
-			right = (right+1) % n;
-			addSushi(sushi[right]);
+		answer = Math.max(answer, typeCnt + ((counter[C] == 0) ? 1 : 0));
+
+		for (int i = 1; i < N; i++) {
+
+			if (--counter[belt[i - 1]] == 0)
+				typeCnt--;
+			if (counter[belt[(i - 1 + K) % N]]++ == 0)
+				typeCnt++;
+			answer = Math.max(answer, typeCnt + ((counter[C] == 0) ? 1 : 0));
 			
-			maxCase = maxCase > tempCase.size() ? maxCase : tempCase.size() ;
 		}
+		System.out.println(answer);
 	}
-	
-	static void removeSushi(int id) {
-		if(id == c) return;
-		selectedSushi.put(id, selectedSushi.get(id) - 1);
-		if(selectedSushi.get(id) == 0) tempCase.remove(id); 
-	}
-	
-	static void addSushi(int id) {
-		if(id == c) return;
-		selectedSushi.put(id, selectedSushi.get(id) + 1);
-		tempCase.add(id);
-	}	
 }
