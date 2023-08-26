@@ -99,14 +99,12 @@ class Main {
             airCleaner[1].col = nCol;
         }
 
-        airCleaner[0].dust = 0;
-        airCleaner[1].dust = 0;
-        airCleaner[0].dir = 0;
-        airCleaner[1].dir = 0;
-        map[airCleaner[0].row][airCleaner[0].col] = -1;
-        map[airCleaner[1].row][airCleaner[1].col] = -1;
-        map[airCleaner[0].row][airCleaner[0].col + 1] = 0;
-        map[airCleaner[1].row][airCleaner[1].col + 1] = 0;
+        for (int i = 0; i < 2; i++) {
+            airCleaner[i].dust = 0;
+            airCleaner[i].dir = 0;
+            map[airCleaner[i].row][airCleaner[i].col] = -1;
+            map[airCleaner[i].row][airCleaner[i].col + 1] = 0;
+        }
     }
 
     public static boolean inRange(int row, int col) {
