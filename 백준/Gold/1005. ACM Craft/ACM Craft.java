@@ -1,94 +1,85 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
+ 
 public class Main {
-	
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
-	static StringBuilder ans = new StringBuilder();
-	static int T, N, K, W;
-	static Node[] tree;
-	
-	static class Node{
-		int time;
-		int maxTime;
-		int parentCnt;
-		int cnt;
-		List<Integer> siblings = new ArrayList<>();
-		
-		private void setTime(int t) {
-			maxTime = t > maxTime ? t : maxTime;
-		}
-	}
-	
-	static void input() throws IOException {
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-		
-		tree = new Node[N+1];
-		for(int i = 1; i <= N; i++) tree[i] = new Node();
-		
-		st = new StringTokenizer(br.readLine());
-		for(int i = 1; i <= N; i++) {
-			tree[i].time = Integer.parseInt(st.nextToken());
-		}
-		
-		for(int i = 0; i < K; i++) {
-			st = new StringTokenizer(br.readLine());
-			int parent = Integer.parseInt(st.nextToken());
-			int sibling = Integer.parseInt(st.nextToken());
-			
-			tree[parent].siblings.add(sibling);
-			tree[sibling].parentCnt++;
-		}
-		
-		W = Integer.parseInt(br.readLine());
-	}
-	
-	static void BFS() {
-		Queue<Integer> q = new ArrayDeque<>();
-		
-		for(int i = 1; i <= N; i++) {
-			if(tree[i].parentCnt == 0) {
-				tree[i].maxTime = tree[i].time;
-				tree[i].time = 0;
-				q.add(i);
-			}
-		}
-		
-		while(!q.isEmpty()) {
-			Node cur = tree[q.poll()];
-			
-			for(int i = 0; i < cur.siblings.size(); i++) {
-				int nodeNum = cur.siblings.get(i);
-				Node next = tree[nodeNum];
-				
-				next.setTime(cur.maxTime + cur.time);
-				if(++next.cnt == next.parentCnt) {
-					q.add(nodeNum);
-				}
-			}
-		}
-		
-		ans.append(tree[W].maxTime + tree[W].time).append("\n");
-	}
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    static int N, K, W;
+    static List<Integer>[] ways;
+    static Queue<Integer> queue;
+    static int[] wayscost;
+    static int[] costs;
+    static int answer;
+    static int[] cntOfParent;
 
-	public static void main(String[] args) throws IOException {
-		T = Integer.parseInt(br.readLine());
-		
-		for(int i = 0; i < T; i++) {
-			input();
-			BFS();	
-		}
-		
-		System.out.print(ans);
-	}
+    static int INF = 100_000_001;
 
+    public static void main(String[] args) throws Exception {
+        int T = Integer.parseInt(br.readLine());
+        for(int t = 0; t < T; t++){
+            input();
+            run();
+        }
+        print();
+    }
+    
+    static void run() throws Exception {
+        for(int n = 1; n <= N; n++){
+            costs[n] = wayscost[n];
+
+            if(cntOfParent[n] == 0){
+                queue.add(n);
+            }
+        }
+
+        while(!queue.isEmpty()){
+            int now = queue.poll();
+
+            for(int to : ways[now]){
+                costs[to] = Math.max(costs[to], costs[now] + wayscost[to]);
+
+                if(--cntOfParent[to] == 0){
+                    queue.offer(to);
+                }
+            }
+        }
+        sb.append(costs[W]).append('\n');
+    }
+    
+    static void input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+
+        wayscost = new int[N+1];
+        ways = new List[N+1];
+        costs = new int[N+1];
+        cntOfParent = new int[N+1];
+        answer = 0;
+        queue = new PriorityQueue<>();
+
+        st = new StringTokenizer(br.readLine());
+        for(int n = 1; n <= N; n++){
+            wayscost[n] = Integer.parseInt(st.nextToken());
+            ways[n] = new ArrayList<>();
+        }
+
+        for(int k = 0; k < K; k++){
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+
+            ways[from].add(to);
+            cntOfParent[to]++;
+        }
+
+        W = Integer.parseInt(br.readLine());
+    }
+    
+    static void print() throws Exception {
+        System.out.println(sb);
+    }
 }
