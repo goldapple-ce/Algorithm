@@ -8,9 +8,10 @@ public class Main {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
     static int N, M;
-    static PriorityQueue<Integer> [] students;
+    static int[][] students;
     static int[] selected;
-    static int answer = 1_000_000_001;
+    static final int INF = 1_000_000_001;
+    static int answer = INF;
 
     public static void main(String[] args) throws Exception {
         input();
@@ -20,25 +21,24 @@ public class Main {
     
     static void run() throws Exception {
         for(int n = 0; n < N; n++){
-            selected[n] = students[n].poll();
+            Arrays.sort(students[n]);
+            selected[n] = 0;
         }
 
-        for(int s = 0; s < N * M; s++){
-            int maxIdx = 0, minIdx = 0;
-            for(int n = 1; n < N; n++){
-                if(selected[maxIdx] < selected[n]){
-                    maxIdx = n;
-                }else if(selected[minIdx] > selected[n]){
+        while(true){
+            int maxValue = 0, minValue = INF;
+            int minIdx = 0;
+            for(int n = 0; n < N; n++){
+                if(maxValue < students[n][selected[n]]){
+                    maxValue = students[n][selected[n]];
+                }
+                if(minValue > students[n][selected[n]]){
+                    minValue = students[n][selected[n]];
                     minIdx = n;
                 }
             }
-
-            answer = Math.min(answer, selected[maxIdx] - selected[minIdx]);
-
-            if(students[minIdx].isEmpty()){
-                break;
-            }
-            selected[minIdx] = students[minIdx].poll();
+            answer = Math.min(answer, maxValue - minValue);
+            if(++selected[minIdx] == M) break;
         }
     }
     
@@ -47,14 +47,13 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        students = new PriorityQueue[N];
+        students = new int[N][M];
         selected = new int[N];
 
         for(int n = 0; n < N; n++){
-            students[n] = new PriorityQueue<>();
             st = new StringTokenizer(br.readLine());
             for(int m = 0; m < M; m++){
-                students[n].offer(Integer.parseInt(st.nextToken()));
+                students[n][m] = Integer.parseInt(st.nextToken());
             }
         }
     }
