@@ -10,7 +10,6 @@ public class Main {
     static int N, M;
     static PriorityQueue<Integer> [] students;
     static int[] selected;
-    static int INF = 1_000_000_001;
     static int answer = 1_000_000_001;
 
     public static void main(String[] args) throws Exception {
@@ -35,13 +34,12 @@ public class Main {
             }
 
             answer = Math.min(answer, selected[maxIdx] - selected[minIdx]);
-            // System.out.println(Arrays.toString(selected));
-            // System.out.println(answer);
-            if(!students[minIdx].isEmpty()){
-                selected[minIdx] = students[minIdx].poll();
+
+            if(students[minIdx].isEmpty()){
+                break;
             }
+            selected[minIdx] = students[minIdx].poll();
         }
-        // System.out.println(Arrays.toString(students));
     }
     
     static void input() throws Exception {
