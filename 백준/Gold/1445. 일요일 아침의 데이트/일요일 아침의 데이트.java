@@ -13,7 +13,6 @@ public class Main {
     static int[][] nMap, gMap;
     static int[][] dirType = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     static PriorityQueue<Position> queue;
-    static int[] answer = new int[2];
 
     public static void main(String[] args) throws Exception {
         input();
@@ -26,8 +25,7 @@ public class Main {
             Position now = queue.poll();
 
             if(map[now.row][now.col] == 'F'){
-                answer[0] = now.gCnt;
-                answer[1] = now.nCnt;
+                sb.append(now.gCnt).append(' ').append(now.nCnt);
                 return;
             }
 
@@ -37,7 +35,10 @@ public class Main {
 
                 if(inRange(nRow, nCol) && !visited[nRow][nCol]){
                     visited[nRow][nCol] = true;
-                    queue.offer(new Position(nRow, nCol, now.gCnt + gMap[nRow][nCol], now.nCnt + nMap[nRow][nCol]));
+                    int nGcnt = now.gCnt + gMap[nRow][nCol];
+                    int nNcnt = now.nCnt + nMap[nRow][nCol];
+
+                    queue.offer(new Position(nRow, nCol, nGcnt, nNcnt));
                 }
             }
         }
@@ -85,18 +86,6 @@ public class Main {
             }
         }
 
-        // for(char[] row : map){
-        //     System.out.println(Arrays.toString(row));
-        // }System.out.println();
-
-        // for(int[] row : nMap){
-        //     System.out.println(Arrays.toString(row));
-        // }System.out.println();
-
-        // for(int[] row : gMap){
-        //     System.out.println(Arrays.toString(row));
-        // }System.out.println();
-
     }
 
     static boolean inRange(int row, int col){
@@ -104,7 +93,7 @@ public class Main {
     }
     
     static void print() throws Exception {
-        System.out.println(answer[0] +" "+ answer[1]);
+        System.out.println(sb);
     }
 
     static class Position implements Comparable<Position>{
