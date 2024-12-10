@@ -37,7 +37,7 @@ public class Main {
     }
 
     static void dijkstra(int sRow, int sCol){
-        Deque<Position> queue = new ArrayDeque<>();
+        PriorityQueue<Position> queue = new PriorityQueue<>();
         queue.offer(new Position(sRow, sCol, 0));
         dist[sRow][sCol][sRow][sCol] = 0;
 
@@ -108,7 +108,7 @@ public class Main {
         System.out.println(answer);
     }
 
-    static class Position {
+    static class Position implements Comparable<Position>{
         int row, col;
         int time;
 
@@ -116,6 +116,11 @@ public class Main {
             this.row = row;
             this.col = col;
             this.time = time;
+        }
+
+        @Override
+        public int compareTo(Position o) {
+            return this.time - o.time;
         }
     }
 }
