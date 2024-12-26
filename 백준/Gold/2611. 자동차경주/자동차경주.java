@@ -12,6 +12,7 @@ public class Main {
     static int[] dists;
     static int[] prev;
     static int[] indegree;
+    static Deque<Integer> queue = new ArrayDeque<>();
 
     public static void main(String[] args) throws Exception {
         input();
@@ -20,26 +21,21 @@ public class Main {
     }
     
     static void run() throws Exception {
-        Deque<Course> queue = new ArrayDeque<>();
-        queue.offer(new Course(1, 0));
+        queue.offer(1);
 
         while(!queue.isEmpty()){
-            Course now = queue.poll();
+            int now = queue.poll();
 
-            // System.out.println(now);
-
-            for(Course to : courses[now.idx]){
-                int nDist = dists[now.idx] + to.dist;
+            for(Course to : courses[now]){
+                int nDist = dists[now] + to.dist;
 
                 if(nDist > dists[to.idx]){
                     dists[to.idx] = nDist;
-                    prev[to.idx] = now.idx;
+                    prev[to.idx] = now;
                 }
 
-                indegree[to.idx]--;
-
-                if(indegree[to.idx] == 0 && to.idx != 1){
-                    queue.offer(new Course(to.idx, nDist));
+                if(--indegree[to.idx] == 0 && to.idx != 1){
+                    queue.offer(to.idx);
                 }
             }
         }
@@ -70,9 +66,6 @@ public class Main {
     }
     
     static void print() throws Exception {
-        // System.out.println(Arrays.toString(dists));
-        // System.out.println(Arrays.toString(prev));
-        // sb.append(null)
         sb.append(dists[1]).append('\n');
         Stack<Integer> stack = new Stack<>();
         int now = 1;
@@ -94,7 +87,7 @@ public class Main {
         System.out.println(sb);
     }
 
-    static class Course implements Comparable<Course>{
+    static class Course {
         int idx, dist;
 
         public Course(int idx, int dist) {
@@ -106,11 +99,5 @@ public class Main {
         public String toString() {
             return "Course [idx=" + idx + ", dist=" + dist + "]";
         }
-
-        @Override
-        public int compareTo(Course o) {
-            return o.dist - this.dist;
-        }
-        
     }
 }
