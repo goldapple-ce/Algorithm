@@ -37,7 +37,7 @@ public class Main {
     static void twoPoint(){
         int left = 0, right = 1;
 
-        while(left < MAX && right < MAX){
+        while(right < MAX){
             int value = sum[right] - sum[left];
             if(value == K){
                 answer[0] = left;
