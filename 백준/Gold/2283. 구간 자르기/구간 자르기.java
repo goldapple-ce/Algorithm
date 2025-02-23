@@ -7,10 +7,9 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
-    static int[] sum;
+    static int[] prifixSum;
     static int N, K;
-    static int MIN, MAX;
-    static Line[] lines;
+    static final int MAX = 1_000_001;
     static int[] answer = new int[2];
 
     public static void main(String[] args) throws Exception {
@@ -20,33 +19,25 @@ public class Main {
     }
     
     static void run() throws Exception {
-        for(Line line : lines){
-            sum[line.start+1]++;
-            sum[line.end+1]--;
-        }
-
-        int cnt = 0;
-
         for(int i = 1; i <= MAX; i++){
-            cnt += sum[i];
-            sum[i] = sum[i-1] + cnt;
+            prifixSum[i] += prifixSum[i-1];
         }
         twoPoint();
     }
 
     static void twoPoint(){
-        int left = 0, right = 1;
+        int left = 0, right = 0;
+        int sum = 0;
 
         while(right < MAX){
-            int value = sum[right] - sum[left];
-            if(value == K){
+            if(sum == K){
                 answer[0] = left;
                 answer[1] = right;
                 return;
-            }else if(value > K){
-                left++;
+            }else if(sum > K){
+                sum -= prifixSum[++left];
             }else{
-                right++;
+                sum += prifixSum[++right];
             }
         }
     }
@@ -56,34 +47,20 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        lines = new Line[N];
+        prifixSum = new int[MAX+1];
 
         for(int n = 0; n < N; n++){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            lines[n] = new Line(a, b);
-
-            MIN = Math.min(MIN, a);
-            MAX = Math.max(MAX, b);
+            prifixSum[a+1]++;
+            prifixSum[b+1]--;
         }
-        MAX += 1;
 
-        sum = new int[MAX+1];
     }
     
     static void print() throws Exception {
         System.out.println(answer[0] + " "+ answer[1]);
-    }
-
-    static class Line {
-        int start, end;
-
-        public Line(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
-        
     }
 }
