@@ -22,26 +22,15 @@ public class Main {
     
     static void run() throws Exception {
         Deque<Move> queue = new ArrayDeque<>();
-
-        for(int line : stations[S]){
-            if(visitedOfLine[line]) continue;
-
-            visitedOfLine[line] = true;
-
-            for(int next : lines[line]){
-                if(visitedOfStation[next]) continue;
-
-                visitedOfStation[next] = true;
-                queue.offer(new Move(next, 0));
-            }
-        }
+        queue.offer(new Move(S, -1));
+        visitedOfStation[S] = true;
 
         while(!queue.isEmpty()){
             Move now = queue.poll();
 
             if(now.station == E){
                 isPosibble = true;
-                answer = now.cnt;
+                answer = now.cnt == -1 ?0 :now.cnt;
                 break;
             }
             
