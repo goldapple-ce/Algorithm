@@ -31,7 +31,7 @@ public class Main {
             if(now.station == E){
                 isPosibble = true;
                 answer = now.cnt == -1 ?0 :now.cnt;
-                break;
+                return;
             }
             
             for(int line : stations[now.station]){
