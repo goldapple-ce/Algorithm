@@ -10,9 +10,8 @@ public class Main {
     static int N, K;
     static Road[] roads;
     static int[] parent;
-    static int totalCost, maxDist;
-    static int[][] dists;
-    static final int INF = 1_000_000_001;
+    static int totalCost, maxCost;
+    static List<Road>[] village;
 
     public static void main(String[] args) throws Exception {
         input();
@@ -21,26 +20,48 @@ public class Main {
     }
     
     static void run() throws Exception {
-        for(Road road : roads){
-            if(find(road.from) != find(road.to)){
-                union(road.from, road.to);
-                dists[road.from][road.to] = road.cost;
-                dists[road.to][road.from] = road.cost;
-                totalCost += road.cost;
+        mst();
+        int root = bfs(0);
+        bfs(root);
+    }
+
+    static int bfs(int start){
+        Deque<Road> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[N];
+        int maxIdx = 0;
+        
+        queue.offer(new Road(start, 0));
+        visited[start] = true;
+
+        while(!queue.isEmpty()){
+            Road now = queue.poll();
+
+            if(maxCost < now.cost){
+                maxCost = now.cost;
+                maxIdx = now.to;
+            }
+
+            for(Road next : village[now.to]){
+                if(!visited[next.to]){
+                    visited[next.to] = true;
+                    queue.offer(new Road(next.to, now.cost+next.cost));
+                }
             }
         }
+        
+        return maxIdx;
+    }
 
-        for(int mid = 0; mid < N; mid++){
-            for(int from = 0; from < N; from++){
-                for(int to = 0; to < N; to++){
-                    dists[from][to] = Math.min(dists[from][to], dists[from][mid] + dists[mid][to]);
-                }
-            }            
-        }
+    static void mst(){
+        for(Road road : roads){
+            int from = road.from, to = road.to;
+            int cost = road.cost;
 
-        for(int from = 0; from < N; from++){
-            for(int to = 0; to < N; to++){
-                maxDist = Math.max(maxDist, dists[from][to]);                
+            if(find(from) != find(to)){
+                union(from, to);
+                village[from].add(new Road(to, cost));
+                village[to].add(new Road(from, cost));
+                totalCost += cost;
             }
         }
     }
@@ -70,12 +91,11 @@ public class Main {
 
         roads = new Road[K];
         parent = new int[N];
-        dists = new int[N][N];
+        village = new List[N];
 
         for(int n = 0; n < N; n++){
             parent[n] = n;
-            Arrays.fill(dists[n], INF);
-            dists[n][n] = 0;
+            village[n] = new ArrayList<>();
         }
 
         for(int k = 0; k < K; k++){
@@ -87,19 +107,11 @@ public class Main {
             roads[k] = new Road(from, to, cost);
         }
         Arrays.sort(roads);
-    
     }
     
     static void print() throws Exception {
-        // for(Road road : roads){
-        //     System.out.println(road);
-        // }
-        // for(int[] dist : dists){
-        //     System.out.println(Arrays.toString(dist));
-        // }
-        // System.out.println(Arrays.toString(parent));
         System.out.println(totalCost);
-        System.out.println(maxDist);
+        System.out.println(maxCost);
     }
 
     static class Road implements Comparable<Road>{
@@ -108,6 +120,11 @@ public class Main {
 
         public Road(int from, int to, int cost){
             this.from = from;
+            this.to = to;
+            this.cost = cost;
+        }
+
+        public Road(int to, int cost){
             this.to = to;
             this.cost = cost;
         }
