@@ -21,8 +21,7 @@ public class Main {
     
     static void run() throws Exception {
         mst();
-        int root = bfs(0);
-        bfs(root);
+        bfs(bfs(0));
     }
 
     static int bfs(int start){
