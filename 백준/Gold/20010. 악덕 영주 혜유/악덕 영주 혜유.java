@@ -29,7 +29,7 @@ public class Main {
         Deque<Road> queue = new ArrayDeque<>();
         boolean[] visited = new boolean[N];
         int maxIdx = 0;
-        
+
         queue.offer(new Road(start, 0));
         visited[start] = true;
 
@@ -53,6 +53,8 @@ public class Main {
     }
 
     static void mst(){
+        int connectionCnt = 0;
+
         for(Road road : roads){
             int from = road.from, to = road.to;
             int cost = road.cost;
@@ -62,6 +64,9 @@ public class Main {
                 village[from].add(new Road(to, cost));
                 village[to].add(new Road(from, cost));
                 totalCost += cost;
+
+                if(++connectionCnt == N-1)
+                    return;
             }
         }
     }
