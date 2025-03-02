@@ -23,17 +23,15 @@ public class Main {
     
     static void run() throws Exception {
         dijkstra(1,moneys[0],times[0]);
-        dijkstra(N,moneys[1],times[1]);
-        // if(moneys[0][N] != INF){
-        //     answer = times[0][N];
-        //     return;
-        // }
-        // System.out.println(Arrays.toString(times[0]));
-        // System.out.println(Arrays.toString(times[1]));
-        // System.out.println(Arrays.toString(moneys[0]));
-        // System.out.println(Arrays.toString(moneys[1]));
 
-        for(int n = 1; n <= N;n++){
+        if(moneys[0][N] != INF){
+            answer = moneys[0][N];
+            return;
+        }
+
+        dijkstra(N,moneys[1],times[1]);
+
+        for(int n = 2; n < N;n++){
             int sumTime = times[0][n] + times[1][n];
             int sumMoney = moneys[0][n] + moneys[1][n];
             if(sumTime <= T){
@@ -42,14 +40,13 @@ public class Main {
         }
     }
 
-    static void dijkstra(int start,int[] moneys,int[] times){
+    static void dijkstra(int start,int[] moneys, int[] times){
         queue = new PriorityQueue<>();
         queue.offer(new Road(start, 0, 0));
         moneys[start] = 0;
 
         while(!queue.isEmpty()){
             Road now = queue.poll();
-            // System.out.println(now);
 
             if(moneys[now.idx] < now.money) continue;
 
