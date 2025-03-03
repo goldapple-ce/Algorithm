@@ -9,7 +9,6 @@ public class Main {
     
     static int N, M;
     static int[] companies;
-    static int[][] graph;
     static List<Line>[] lines;
     static int[] transfers, dists;
 
@@ -22,30 +21,15 @@ public class Main {
     }
     
     static void run() throws Exception {
-        dijkstra(0);
-    }
-
-    static void dijkstra(int start){
-        PriorityQueue<Line> queue = new PriorityQueue<>(new Comparator<Line>() {
-            @Override
-            public int compare(Main.Line o1, Main.Line o2) {
-                if(o1.transfer == o2.transfer){
-                    return o1.dist - o2.dist;
-                }
-                return o1.transfer - o2.transfer;
-            }
-        });
-
-        queue.offer(new Line(start, 0, 0));
-        transfers[start] = 0;
+        PriorityQueue<Line> queue = new PriorityQueue<>();
+        queue.offer(new Line(0, 0, 0));
+        transfers[0] = 0;
 
         while(!queue.isEmpty()){
             Line now = queue.poll();
-            // System.out.println(now);
 
-            if(transfers[now.idx] < now.transfer){
-                continue;
-            }
+            if(now.idx == M) return;
+            if(transfers[now.idx] < now.transfer) continue;
 
             for(Line to : lines[now.idx]){
                 int nTransfer = transfers[now.idx] + (companies[now.idx] == companies[to.idx] ? 0 :1);
@@ -66,7 +50,6 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
 
         companies = new int[N];
-        graph = new int[N][N];
         lines = new List[N];
         transfers = new int[N];
         dists = new int[N];
@@ -80,29 +63,22 @@ public class Main {
             companies[n] = Integer.parseInt(br.readLine());
         }
 
-        for(int row = 0;row < N; row++){
-            st = new StringTokenizer(br.readLine());
-            for(int col = 0; col < N; col++){
-                graph[row][col] = Integer.parseInt(st.nextToken());
-            }
-        }
-
         for(int from = 0;from < N; from++){
+            st = new StringTokenizer(br.readLine());
             for(int to = 0; to < N; to++){
-                if(graph[from][to] != 0){
-                    lines[from].add(new Line(to, graph[from][to], 0));
+                int dist = Integer.parseInt(st.nextToken());
+                if(dist != 0){
+                    lines[from].add(new Line(to, dist, 0));
                 }
             }
         }
     }
     
     static void print() throws Exception {
-        sb.append(transfers[M]).append(' ').append(dists[M]);
-        System.out.println(sb);
-
+        System.out.println(transfers[M] +" "+dists[M]);
     }
 
-    static class Line {
+    static class Line implements Comparable<Line>{
         int idx, dist;
         int transfer;
 
@@ -111,9 +87,13 @@ public class Main {
             this.dist = dist;
             this.transfer = transfer;
         }
+
         @Override
-        public String toString() {
-            return "Line [idx=" + idx + ", dist=" + dist + ", transfer=" + transfer + "]";
+        public int compareTo(Main.Line o) {
+            if(this.transfer == o.transfer){
+                return this.dist - o.dist;
+            }
+            return this.transfer - o.transfer;
         }
         
     }
