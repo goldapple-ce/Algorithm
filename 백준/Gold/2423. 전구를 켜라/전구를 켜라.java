@@ -8,10 +8,12 @@ public class Main {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
     static int maxRow, maxCol;
-    static boolean[][][] map;
+    static int[][][] map;
     static int[][] dirType = {{-1,1},{1,1},{1,-1},{-1,-1}};
-    static int answer = -1;
     static int[][] costs;
+    static PriorityQueue<Node> queue = new PriorityQueue<>();
+
+    static int answer = -1;
     static final int INF = 500_000_000;
 
     public static void main(String[] args) throws Exception {
@@ -25,13 +27,11 @@ public class Main {
             return;
         }
 
-        PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.offer(new Node(0, 0, 0));
         costs[0][0] = 0;
 
         while(!queue.isEmpty()){
             Node now = queue.poll();
-            // System.out.println(now);
 
             if(now.row == maxRow && now.col == maxCol){
                 answer = now.cost;
@@ -47,7 +47,7 @@ public class Main {
 
                 int nRow = now.row + dir[0];
                 int nCol = now.col + dir[1];
-                int nCost = now.cost + (map[now.row][now.col][d] ?0 :1);
+                int nCost = now.cost + 1 - map[now.row][now.col][d];
 
                 if(inRange(nRow, nCol) && costs[nRow][nCol] > nCost){
                     costs[nRow][nCol] = nCost;
@@ -66,7 +66,7 @@ public class Main {
         maxRow = Integer.parseInt(st.nextToken());
         maxCol = Integer.parseInt(st.nextToken());
 
-        map = new boolean[maxRow+1][maxCol+1][4];
+        map = new int[maxRow+1][maxCol+1][4];
         costs = new int[maxRow+1][maxCol+1];
 
         for(int[] row : costs){
@@ -78,21 +78,14 @@ public class Main {
             for(int col = 0; col < maxCol; col++){
                 char value = strRow.charAt(col);
                 if(value == '/'){
-                    map[row+1][col][0] = true;
-                    map[row][col+1][2] = true;
+                    map[row+1][col][0] = 1;
+                    map[row][col+1][2] = 1;
                 }else{
-                    map[row][col][1] = true;
-                    map[row+1][col+1][3] = true;
+                    map[row][col][1] = 1;
+                    map[row+1][col+1][3] = 1;
                 }
             }
         }
-
-        // for(boolean[][] row : map){
-        //     for(boolean[] value : row){
-        //         System.out.print(Arrays.toString(value) +" ");
-        //     }
-        //     System.out.println();
-        // }
     }
     
     static void print() throws Exception {
