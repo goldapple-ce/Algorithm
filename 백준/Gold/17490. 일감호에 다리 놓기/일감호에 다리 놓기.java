@@ -8,10 +8,9 @@ public class Main{
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
     static int N, M;
-    static long K;
+    static long K, need;
     static int[] parent;
     static List<Bridge> bridges = new ArrayList<>();
-    static long needs;
 
     public static void main(String[] args) throws Exception {
         input();
@@ -21,10 +20,14 @@ public class Main{
     
     static void run() throws Exception {
         if(M <= 1) return;
+        int cnt = 0;
         for(Bridge bridge : bridges){
             if(find(bridge.from) != find(bridge.to)){
                 union(bridge.from, bridge.to);
-                needs += bridge.dist;
+                need += bridge.dist;
+                if(++cnt == N || need > K){
+                    return;
+                }
             }
         }
     }
@@ -52,6 +55,8 @@ public class Main{
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Long.parseLong(st.nextToken());
+
+        if(M <= 1) return;
 
         parent = new int[N+1];
 
@@ -90,7 +95,7 @@ public class Main{
     }
     
     static void print() throws Exception {
-        System.out.println(K >= needs ?"YES" :"NO");
+        System.out.println(need <= K ?"YES" :"NO");
     }
 
     static class Bridge implements Comparable<Bridge>{
