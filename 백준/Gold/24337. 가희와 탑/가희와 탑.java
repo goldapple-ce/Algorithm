@@ -37,13 +37,9 @@ public class Main{
             nums[N-B] = Math.max(nums[N-B-1], nums[N-B+1])+1;
         }
 
-        if(A == 1){
-            if(B == N){
-                nums[0] = N-1;
-            }else{
-                nums[0] = nums[N-B];
-                nums[N-B] = 0;
-            }
+        if(A == 1 && B != N){
+            nums[0] = nums[N-B];
+            nums[N-B] = 0;
         }
         
     }
