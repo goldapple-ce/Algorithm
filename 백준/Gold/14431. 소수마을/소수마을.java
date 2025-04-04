@@ -12,7 +12,6 @@ public class Main{
     static List<Road>[] roads;
 
     static final int INF = 8500;
-    static boolean[] primes = new boolean[INF];
 
     public static void main(String[] args) throws Exception {
         input();
@@ -76,13 +75,14 @@ public class Main{
             villages[n] = new Position(row, col);
         }
 
-        findPrime();
+        boolean[] notPrimes = new boolean[INF];
+        findPrime(notPrimes);
 
         for(int from = 0; from < N-1; from++){
             for(int to = from+1; to < N; to++){
                 int cost = (int) Math.sqrt(Math.pow(villages[from].row - villages[to].row,2) + Math.pow(villages[from].col - villages[to].col, 2));
                 
-                if(primes[cost]){
+                if(!notPrimes[cost]){
                     roads[from].add(new Road(to, cost));
                     roads[to].add(new Road(from, cost));
                 }
@@ -95,15 +95,13 @@ public class Main{
         System.out.println(costs[N-1] == INF ?-1 : costs[N-1]);
     }
 
-    static void findPrime(){
-        Arrays.fill(primes, true);
-        primes[0] = primes[1] = false;
-        int length = primes.length;
+    static void findPrime(boolean[] notPrimes){
+        notPrimes[0] = notPrimes[1] = true;
 
-        for(int i = 2; i < Math.sqrt(length); i++){
-            if(primes[i]){
-                for(int j = i*i; j < length; j += i){
-                    primes[j] = false;
+        for(int i = 2; i < Math.sqrt(notPrimes.length); i++){
+            if(!notPrimes[i]){
+                for(int j = i*i; j < notPrimes.length; j += i){
+                    notPrimes[j] = true;
                 }
             }
         }
