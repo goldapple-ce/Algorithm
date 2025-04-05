@@ -96,7 +96,7 @@ public class Main{
 
         @Override
         public int compareTo(Main.Move o) {
-            return o.score+(N-o.cnt) - this.score - (N-this.cnt);
+            return o.score - o.cnt - this.score + this.cnt;
         }
         
     }
