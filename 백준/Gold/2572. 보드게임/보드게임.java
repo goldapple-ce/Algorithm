@@ -30,11 +30,11 @@ public class Main{
 
             if(now.cnt == N){
                 answer = Math.max(answer, now.score);
-                continue;
+                return;
             }
 
             for(Road to : roads[now.idx]){
-                int nScore = now.score + (cards[now.cnt] == to.card ?10 :0);
+                int nScore = now.score + (cards[now.cnt] == to.card ?1 :0);
 
                 if(scores[now.cnt][to.idx] < nScore){
                     scores[now.cnt][to.idx] = nScore;
@@ -77,7 +77,7 @@ public class Main{
     }
     
     static void print() throws Exception {
-        System.out.println(answer);
+        System.out.println(answer*10);
     }
 
     static class Move implements Comparable<Move>{
@@ -96,10 +96,7 @@ public class Main{
 
         @Override
         public int compareTo(Main.Move o) {
-            if(this.score == o.score){
-                return this.cnt - o.cnt;
-            }
-            return o.score - this.score;
+            return o.score+(N-o.cnt) - this.score - (N-this.cnt);
         }
         
     }
