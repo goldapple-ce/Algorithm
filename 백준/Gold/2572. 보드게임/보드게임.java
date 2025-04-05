@@ -22,29 +22,23 @@ public class Main{
     }
     
     static void run() throws Exception {
-        PriorityQueue<Move> queue = new PriorityQueue<>((o1,o2)->{
-            if(o1.score == o2.score){
-                return o1.cnt - o2.cnt;
-            }
-            return o2.score - o1.score;
-        });
-
-        queue.offer(new Move(1, 0,0));
+        PriorityQueue<Move> queue = new PriorityQueue<>();
+        queue.offer(new Move(1,0,0));
 
         while(!queue.isEmpty()){
             Move now = queue.poll();
 
             if(now.cnt == N){
-                answer = Math.max(answer,now.score);
+                answer = Math.max(answer, now.score);
                 continue;
             }
 
-            for(Road road : roads[now.idx]){
-                int nScore = now.score + (cards[now.cnt] == road.card ?10 :0);
+            for(Road to : roads[now.idx]){
+                int nScore = now.score + (cards[now.cnt] == to.card ?10 :0);
 
-                if(scores[now.cnt][road.idx] < nScore){
-                    scores[now.cnt][road.idx] = nScore;
-                    queue.offer(new Move(road.idx, now.cnt+1, nScore));
+                if(scores[now.cnt][to.idx] < nScore){
+                    scores[now.cnt][to.idx] = nScore;
+                    queue.offer(new Move(to.idx, now.cnt+1, nScore));
                 }
             }
         }
@@ -71,7 +65,7 @@ public class Main{
             roads[m] = new ArrayList<>();
         }
 
-        for(int k = 0;k < K; k++){
+        for(int k = 0; k < K; k++){
             st = new StringTokenizer(br.readLine());
             int from = Integer.parseInt(st.nextToken());
             int to = Integer.parseInt(st.nextToken());
@@ -86,7 +80,7 @@ public class Main{
         System.out.println(answer);
     }
 
-    static class Move {
+    static class Move implements Comparable<Move>{
         int idx, cnt, score;
 
         public Move(int idx, int cnt, int score) {
@@ -98,6 +92,14 @@ public class Main{
         @Override
         public String toString() {
             return "Move [idx=" + idx + ", cnt=" + cnt + ", score=" + score + "]";
+        }
+
+        @Override
+        public int compareTo(Main.Move o) {
+            if(this.score == o.score){
+                return this.cnt - o.cnt;
+            }
+            return o.score - this.score;
         }
         
     }
