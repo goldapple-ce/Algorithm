@@ -23,8 +23,7 @@ public class Main{
         while(left <= right){
             int mid = (left+right)/2;
 
-            int time = distract(mid);
-            if(time <= X){
+            if(decentralize(mid) <= X){
                 answer = mid;
                 right = mid-1;
             }else{
@@ -33,9 +32,9 @@ public class Main{
         }
     }
 
-    static int distract(int cnt){
+    static int decentralize(int cnt){
         int maxTime = 0;
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        PriorityQueue<Integer> queue = new PriorityQueue<>(cnt);
         for(int c = 0; c < cnt; c++){
             queue.offer(0);
         }
@@ -46,7 +45,6 @@ public class Main{
             queue.offer(n);
         }
 
-        // System.out.println(String.format("cnt : %d, maxTime : %d", cnt,maxTime));
         return maxTime;
     }
     
