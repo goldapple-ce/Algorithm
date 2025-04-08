@@ -8,15 +8,17 @@ public class Main{
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
     static int N, M, P, Q;
-    static List<Road> roads;
-    static Road addRoad;
+    static Road[] roads;
     static int[] parent;
+
+    static int r = 1000010000;
 
     public static void main(String[] args) throws Exception {
         int T = Integer.parseInt(br.readLine());
         for(int test_case = 0; test_case < T; test_case++){
             input();
             run();
+            sb.append('\n');
         }
         print();
     }
@@ -26,15 +28,14 @@ public class Main{
             if(find(road.from) != find(road.to)){
                 union(road.from, road.to);
                 if((road.from == P && road.to == Q) || (road.from == Q && road.to == P)){
-                    sb.append("YES").append('\n');
+                    sb.append("YES");
                     return;
                 }
             }
         }
 
-        sb.append("NO").append('\n');
+        sb.append("NO");
     }
-
     static int find(int x){
         if(parent[x] == x){
             return x;
@@ -61,7 +62,7 @@ public class Main{
         P = Integer.parseInt(st.nextToken());
         Q = Integer.parseInt(st.nextToken());
 
-        roads = new ArrayList<>();
+        roads = new Road[M];
         parent = new int[N+1];
 
         for(int n = 0; n <= N;n++){
@@ -74,10 +75,10 @@ public class Main{
             int to = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
 
-            roads.add(new Road(from, to, cost));
+            roads[m] = new Road(from, to, cost);
         }
 
-        roads.sort(null);
+        Arrays.sort(roads);
     }
     
     static void print() throws Exception {
