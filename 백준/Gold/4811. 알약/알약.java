@@ -25,8 +25,6 @@ public class Main {
         if(w == 0){
             return 1;
         }
-        // System.out.println(String.format("w : %d, h : %d", w,h));
-        long cnt = 0;
 
         if(dp[w][h] == 0){
             if(h != 0)
@@ -34,9 +32,7 @@ public class Main {
             dp[w][h] += dfs(w-1,h+1);
         }
         
-        cnt += dp[w][h];
-
-        return cnt;
+        return dp[w][h];
     }
     
     static boolean input() throws Exception {
