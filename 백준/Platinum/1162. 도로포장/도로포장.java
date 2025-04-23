@@ -21,6 +21,11 @@ public class Main {
     }
     
     static void run() throws Exception {
+        if(N <= K){
+            answer = 0;
+            return;
+        }
+        
         PriorityQueue<Road> queue = new PriorityQueue<>();
         queue.offer(new Road(1, 0,0));
         dists[0][1] = 0;
