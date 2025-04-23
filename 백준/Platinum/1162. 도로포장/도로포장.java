@@ -12,6 +12,7 @@ public class Main {
     static long[][] dists;
 
     static final long INF = 100_000_000_000L;
+    static long answer = INF;
 
     public static void main(String[] args) throws Exception {
         input();
@@ -41,16 +42,13 @@ public class Main {
                     queue.offer(new Road(to.idx, nDist, now.k));
                 }
 
-                if(now.k < K && (dists[now.k+1][to.idx] > now.dist || dists[now.k +1][to.idx] > dists[now.k][to.idx])){
-                    dists[now.k+1][to.idx] = Math.min(now.dist, dists[now.k][to.idx]);
-                    queue.offer(new Road(to.idx, dists[now.k+1][to.idx], now.k +1));
+                if(now.k < K && dists[now.k+1][to.idx] > now.dist){
+                    dists[now.k+1][to.idx] = now.dist;
+                    queue.offer(new Road(to.idx, now.dist, now.k +1));
                 }
             }
         }
 
-        // for(long[] row : dists){
-        //     System.out.println(Arrays.toString(row));
-        // }
     }
     
     static void input() throws Exception {
@@ -64,14 +62,11 @@ public class Main {
 
         for(int n = 0; n <= N; n++){
             roads[n] = new ArrayList<>();
-            if(n != 1){
-                for(int k = 0; k <= K; k++){
-                    dists[k][n] = INF;
-                }
-            }
         }
 
-
+        for(int k = 0; k <= K; k++){
+            Arrays.fill(dists[k], INF);
+        }
 
         for(int m = 0; m < M; m++){
             st = new StringTokenizer(br.readLine());
@@ -85,7 +80,11 @@ public class Main {
     }
     
     static void print() throws Exception {
-        System.out.println(dists[K][N]);
+        for(int k = 0; k <= K; k++){
+            answer = Math.min(answer, dists[k][N]);
+        }
+
+        System.out.println(answer);
     }
 
     static class Road implements Comparable<Road>{
