@@ -33,7 +33,7 @@ public class Main {
                 visited = new boolean[4][4];
                 String word = words[wordIdx];
 
-                if(subRun(word)){
+                if(subRun(word.toCharArray())){
                     totalCnt++;
                     score += scoreType[word.length()];
                     answer = word;
@@ -44,12 +44,12 @@ public class Main {
         }
     }
 
-    static boolean subRun(String word){
+    static boolean subRun(char[] word){
         for(int row = 0; row < 4; row++){
             for(int col = 0; col < 4; col++){
-                if(word.charAt(0) == map[row][col]){
+                if(word[0] == map[row][col]){
                     visited[row][col] = true;
-                    if(dfs(word, new Position(row, col), 0)){
+                    if(dfs(word, row, col, 0)){
                         return true;
                     };
                     visited[row][col] = false;
@@ -60,18 +60,18 @@ public class Main {
         return false;
     }
 
-    static boolean dfs(String word, Position now, int depth){
-        if(word.length()-1 == depth){
+    static boolean dfs(char[] word, int row, int col, int depth){
+        if(word.length-1 == depth){
             return true;
         }
 
         for(int[] dir : dirType){
-            int nRow = now.row + dir[0];
-            int nCol = now.col + dir[1];
+            int nRow = row + dir[0];
+            int nCol = col + dir[1];
 
-            if(inRange(nRow, nCol) && word.charAt(depth + 1) == map[nRow][nCol] && !visited[nRow][nCol]){
+            if(inRange(nRow, nCol) && word[depth + 1] == map[nRow][nCol] && !visited[nRow][nCol]){
                 visited[nRow][nCol] = true;
-                if(dfs(word, new Position(nRow, nCol), depth +1)) return true;
+                if(dfs(word, nRow, nCol, depth +1)) return true;
                 visited[nRow][nCol] = false;
             }
         }
@@ -109,7 +109,6 @@ public class Main {
             return o1.length() - o2.length();
         });
         
-        // System.out.println(Arrays.toString(words));
     }
     
     static void print() throws Exception {
