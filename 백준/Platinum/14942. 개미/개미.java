@@ -29,24 +29,17 @@ public class Main {
                 costs[now][depth] = costs[now][depth-1] + costs[paths[now][depth-1]][depth-1];
             }
         }
-        // for(int n = 1; n <= N; n++){
-        //     System.out.println(Arrays.toString(costs[n]));
-        // }
-
-        // for(int n = 1; n <= N; n++){
-        //     System.out.println(Arrays.toString(paths[n]));
-        // }
 
         for(int n = 1; n <= N; n++){
             int now = n;
-            // System.out.println("now : " + now);
+
             while(now != 1){
                 int depth = binarySearch(now, ants[n]);
                 ants[n] -= costs[now][depth];
-                // System.out.println(String.format("depth : %d", depth));
                 if(depth == 0) break;
                 now = paths[now][depth];
             }
+
             answer[n] = now;
         }
     }
@@ -58,7 +51,9 @@ public class Main {
         while(left <= right){
             int mid = (left + right) / 2;
 
-            if(costs[idx][mid] <= energy){
+            if(costs[idx][mid] == energy){
+                return mid;
+            }else if(costs[idx][mid] < energy){
                 ans = mid;
                 left = mid + 1;
             }else{
