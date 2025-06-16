@@ -7,13 +7,13 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     
-    static final int INF = 1_000_000_000;
+    static final long INF = 100_000_000_000L;
 
     static int N, M;
     static int[] prices;
     static List<Road>[] roads;
-    static int[][] costs;
-    static int answer = INF;
+    static long[][] costs;
+    static long answer = INF;
 
     public static void main(String[] args) throws Exception {
         input();
@@ -40,7 +40,7 @@ public class Main {
             if(now.dist > costs[now.idx][now.price]) continue;
 
             for(Road to : roads[now.idx]){
-                int nCost = to.dist * now.price + now.dist;
+                long nCost = to.dist * now.price + now.dist;
                 int nPrice = Math.min(now.price, prices[to.idx]);
 
                 if(costs[to.idx][nPrice] > nCost){
@@ -58,7 +58,7 @@ public class Main {
 
         prices = new int[N+1];
         roads = new List[N+1];
-        costs = new int[N+1][2501];
+        costs = new long[N+1][2501];
 
         st = new StringTokenizer(br.readLine());
         for(int n = 1; n <= N; n++){
@@ -84,15 +84,15 @@ public class Main {
     }
 
     static class Road implements Comparable<Road>{
-        int idx, dist;
-        int price;
+        int idx,price;
+        long dist;
 
-        public Road(int idx, int dist) {
+        public Road(int idx, long dist) {
             this.idx = idx;
             this.dist = dist;
         }
 
-        public Road(int idx, int dist, int price) {
+        public Road(int idx, long dist, int price) {
             this.idx = idx;
             this.dist = dist;
             this.price = price;
@@ -105,7 +105,7 @@ public class Main {
 
         @Override
         public int compareTo(Main.Road o) {
-            return this.dist - o.dist;
+            return Long.compare(this.dist, o.dist);
         }
         
     }
