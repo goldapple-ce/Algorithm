@@ -25,26 +25,25 @@ public class Main {
     
     static void run() throws Exception {
         Deque<Position> queue = new ArrayDeque<>();
-        queue.offer(new Position(S.row, S.col, 0,5));
+        queue.offer(new Position(S.row, S.col, 0));
         visited[S.row][S.col] = 0;
 
         while(!queue.isEmpty()){
             Position now = queue.poll();
-            // System.out.println(now);
             if(now.row == E.row && now.col == E.col){
                 answer = now.cnt;
                 return;
             }
 
             for(int dir = 0; dir < 4; dir++){
-                if(now.dir == dir) continue;
+                // if(now.dir == dir) continue;
                 int nCnt = now.cnt + 1;
                 for(int k = 1; k <= K; k++){
                     int nRow = now.row + dirType[dir][0] * k, nCol = now.col + dirType[dir][1] * k;
                     if(!inRange(nRow, nCol) || map[nRow][nCol] == '#' || visited[nRow][nCol] < nCnt) break;
                     if(visited[nRow][nCol] == INF){
                         visited[nRow][nCol] = nCnt;
-                        queue.offer(new Position(nRow, nCol, nCnt, k == K ?5 : dir));
+                        queue.offer(new Position(nRow, nCol, nCnt));
                     }
                 }
             }
@@ -76,9 +75,6 @@ public class Main {
     }
     
     static void print() throws Exception {
-        // for(int[] row : visited){
-        //     System.out.println(Arrays.toString(row));
-        // }
         System.out.println(answer);
     }
 
@@ -91,14 +87,19 @@ public class Main {
             this.col = col;
         }
 
+
+        public Position(int row, int col, int cnt) {
+            this.row = row;
+            this.col = col;
+            this.cnt = cnt;
+        }
+
         public Position(int row, int col, int cnt, int dir) {
             this.row = row;
             this.col = col;
             this.cnt = cnt;
             this.dir = dir;
         }
-
-        
 
         @Override
         public String toString() {
